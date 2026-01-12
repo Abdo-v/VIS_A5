@@ -5,6 +5,34 @@ import { getSeriesForCountryOrWorld } from '../data.js'
 
 const AUSTRIA_ISO3 = 'AUT'
 
+function extentYears(series) {
+  if (!series || series.length === 0) return null
+  const years = series.map((d) => d.year)
+  return [d3.min(years), d3.max(years)]
+}
+
+function clipSeriesToWindow(series, minYear) {
+  if (!series || series.length === 0 || minYear == null) return series
+  return series.filter((d) => d.year >= minYear)
+}
+
+function computeRecentWindowStart({ aSeries, bSeries, innerWidth, innerHeight }) {
+  const aExt = extentYears(aSeries)
+  const bExt = extentYears(bSeries)
+  if (!aExt && !bExt) return null
+
+  const maxYear = d3.max([aExt?.[1], bExt?.[1]].filter((d) => d != null))
+  const minYear = d3.min([aExt?.[0], bExt?.[0]].filter((d) => d != null))
+  if (maxYear == null || minYear == null) return null
+
+  // If the chart is small, shorten the time window to keep the line readable.
+  const cramped = innerWidth < 420 || innerHeight < 105
+  const yearsToShow = cramped ? 20 : 35
+  const start = Math.max(minYear, maxYear - yearsToShow)
+
+  return start
+}
+
 function buildLineChart({
   container,
   title,
@@ -42,7 +70,17 @@ function buildLineChart({
 
     const [austriaSeries, compSeries, compName] = getSeriesPair({ state, data })
 
-    const all = [...austriaSeries, ...compSeries]
+    const startYear = computeRecentWindowStart({
+      aSeries: austriaSeries,
+      bSeries: compSeries,
+      innerWidth: innerW,
+      innerHeight: innerH,
+    })
+
+    const aSeriesClipped = clipSeriesToWindow(austriaSeries, startYear)
+    const cSeriesClipped = clipSeriesToWindow(compSeries, startYear)
+
+    const all = [...aSeriesClipped, ...cSeriesClipped]
     const xDomain = d3.extent(all, (d) => d.year)
     const yDomain = d3.extent(all, (d) => d.value)
 
@@ -50,7 +88,10 @@ function buildLineChart({
     const y = d3.scaleLinear().domain(yDomain ?? [0, 1]).nice().range([innerH, 0])
 
     if (showXAxis) {
-      xAxisG.attr('transform', `translate(0,${innerH})`).call(d3.axisBottom(x).ticks(6).tickFormat(d3.format('d')))
+      const tickCount = Math.max(3, Math.min(7, Math.floor(innerW / 120)))
+      xAxisG
+        .attr('transform', `translate(0,${innerH})`)
+        .call(d3.axisBottom(x).ticks(tickCount).tickFormat(d3.format('d')))
     } else {
       xAxisG.selectAll('*').remove()
     }
@@ -68,8 +109,8 @@ function buildLineChart({
       .y((d) => y(d.value))
 
     const paths = [
-      { key: 'AUT', label: 'Austria', color: colorA, series: austriaSeries },
-      { key: selected || 'WORLD', label: compName, color: colorB, series: compSeries },
+      { key: 'AUT', label: 'Austria', color: colorA, series: aSeriesClipped },
+      { key: selected || 'WORLD', label: compName, color: colorB, series: cSeriesClipped },
     ]
 
     const pathSel = lineG.selectAll('path').data(paths, (d) => d.key)
@@ -81,7 +122,9 @@ function buildLineChart({
       .attr('stroke', (d) => d.color)
 
     // Points for hover (sparse: only existing values)
-    const points = paths.flatMap((p) => p.series.map((d) => ({ ...d, seriesKey: p.key, label: p.label, color: p.color })))
+    const points = paths.flatMap((p) =>
+      p.series.map((d) => ({ ...d, seriesKey: p.key, label: p.label, color: p.color })),
+    )
 
     const pt = lineG.selectAll('circle').data(points, (d) => `${d.seriesKey}-${d.year}`)
     pt.join(
