@@ -1,0 +1,744 @@
+Abdalrahman Mohammed 1 WS 25
+VIS-Assignment 4
+Name: Abdalrahman Mohammed
+Student number: 12136780
+1. Data, users, and tasks (25 points)
+User Group Activists from WWF:
+A1- Investigate the relative impact of climate change on natural habitats in different parts of the world, regarding, e.g., natural disasters, sea
+level, or forest cover
+A2- create a ranking of countries (or parts of the world) in the data based on a specific metric (rising sea levels in the last x years, temperature
+changes, etc.)
+A3- retrieve detailed information (disaster frequence, temperature change in the last x years, etc.) of a selected country/part of the world, with
+information about what possible disasters might affect this country/part of the world
+Dataset 14 — Climate-related Disasters Frequency
+Content:
+ Country-level counts of climate-related disasters (e.g., floods, storms, droughts, heatwaves)
+ Annual records
+ Rich temporal depth (often 1970–2020+)
+Interesting features:
+ Highly uneven distribution: some countries have frequent disasters (e.g., coastal or tropical regions), others very few.
+ Multiple disaster types allow distinguishing ecological pressures.
+ Strong year-to-year variability, valuable for identifying spikes or long-term increases.
+Missing values:
+ Some countries or early years may be missing due to incomplete reporting.
+ Some disaster types may be underreported historically.
+Task relevance:
+ Supports A1 by showing regional hazard intensity.
+ Enables A2 by allowing ranking by disaster frequency or trend.
+ Enables A3, especially disaster-type inspection for selected countries.
+Dataset 23 — Annual Surface Temperature Change
+Content:
+ Annual temperature anomaly (relative to long-term baseline)
+ Country-level data
+ Often complete from 1960–2022+
+Interesting features:
+ Clear global warming signal visible as rising anomalies.
+ Regional differences allow comparing hotspots (e.g., Arctic warming faster).
+ Long consistent time series suitable for trend analysis.
+Missing values:
+ Some small regions or island states may have missing or aggregated values.
+Task relevance:
+ Supports A1 by showing extent of temperature changes across regions.
+ Enables A2 rankings based on warming trends (e.g., top 10 fastest-warming countries).
+ Provides A3 detail-on-demand temperature curves for a selected country.
+Dataset 25 — Change in Mean Sea Levels
+Content:
+ Mean sea-level rise measurements in millimeters
+ Global or regional aggregates (often fewer country-level data)
+ Long-term time series (multiple decades)
+Interesting features:
+ Strong upward long-term trend consistent with global warming.
+ Clear acceleration observable in many regions since 1990s.
+ Useful for identifying areas where sea-level rise poses severe ecological risk.
+Missing values:
+ Many countries lack direct measurements; data often available only at regional/global scale.
+ Some time steps may be missing due to measurement limitations.
+Task relevance:
+ Supports A1 by enabling analysis of sea-level impacts on coastal ecosystems.
+Abdalrahman Mohammed 2 WS 25
+ Supports A2 by allowing ranking of regions with highest sea-level rise (where available).
+ Supports A3 by providing additional hazard information for coastal countries.
+User Group Data Journalists:
+J1- Demonstrate how climate change indicators in Austria compare to other countries
+J2- show a climate tax/expenditure discrepancy comparison between Austria and a selected country
+J3- show the relation between Fossil Fuel subsidies and environmental taxes for different countries
+Data journalists specialize in communicating complex environmental, political, and economic patterns in a way that the general public can
+understand. Their work requires identifying clear, evidence-based differences between Austria and other countries, revealing inconsistencies in
+policy, and highlighting trends relevant to climate reporting.
+They need tools that allow:
+ Fast comparison between Austria and other countries
+ Detection of discrepancies between taxation and expenditures
+ Understanding of relationships between subsidies and climate-policy signals
+ Access to both overview and detail views for storytelling
+ Simple interactions (no expert skills required)
+The DJ dashboard (overview mode + selectable comparison mode, linked scatter, discrepancy trends, bar charts) directly supports these needs.
+Tasks for Data Journalists (J1–J3)
+(domain tasks only; abstraction will come later)
+J1 — Compare Austria to other countries using climate-relevant financial and environmental indicators
+In overview mode, the dashboard displays a comparison between Austria and world averages for:
+ temperature anomaly
+ CO₂ emissions
+ disaster frequency
+Selecting any country replaces the global average with that country.
+This allows journalists to answer: “How does Austria compare overall?”
+J2 — Compare the discrepancy between environmental taxes and environmental protection expenditures
+Journalists often investigate whether countries reinvest their environmental tax revenue.
+The discrepancy view shows:
+(taxes – expenditures) over time.
+In detail mode, Austria is compared directly to a selected country.
+J3 — Analyze the relationship between fossil-fuel subsidies and environmental taxes across countries
+The scatter plot uses:
+ x-axis: fossil fuel subsidies
+ y-axis: environmental taxes
+An ideal view for detecting contradictions (e.g., high taxes but also high subsidies).
+Austria is highlighted for quick identification.
+Dataset Description
+Dataset 07 — Environmental Taxes
+Content: Annual environmental tax revenues per country.
+Interesting:
+ Large cross-country variation.
+ Often stable long-term with policy-driven jumps.
+Missing values:
+ Some non-OECD countries have incomplete early records.
+Supports:
+ J1: Compare Austria’s tax burden.
+ J2: Forms the “tax” side of the discrepancy.
+ J3: Y-axis in the subsidies–taxes scatter plot.
+Dataset 08 — Environmental Protection Expenditures
+Content: Country-level investments in environmental protection.
+Interesting:
+ Strong variation during economic cycles or climate investment programs.
+Missing values:
+ Some gaps in earlier years.
+Supports:
+ J1: Compare Austria to other countries.
+ J2: Forms the “expenditure” side of the discrepancy.
+Dataset 09 — Fossil Fuel Subsidies
+Content: Monetary support to fossil-fuel consumption or production.
+Interesting:
+ Strong policy signal; high subsidies slow climate transition.
+Abdalrahman Mohammed 3 WS 25
+ Countries differ by orders of magnitude.
+Missing values:
+ Some nations underreport or have incomplete data.
+Supports:
+ J1: Contextualize Austria’s policy alignment.
+ J3: X-axis of the subsidies–taxes relationship view.
+Dataset 14 — Disaster Frequency
+Content: Annual counts of climate-related disasters.
+Interesting:
+ High variability; reflects climate exposure.
+Missing values:
+ Underreporting in older years.
+Supports:
+ J1: One of the environmental indicators compared in the first panel.
+Dataset 23 — Surface Temperature Change
+Content: Annual temperature anomaly per country.
+Interesting:
+ Strong upward trend globally.
+Missing values:
+ Some countries have partial series.
+Supports:
+ J1: Climate-change indicator in the first panel.
+Dataset 25 — Mean Sea-Level Change
+(Used only where relevant; Austria has no coastline.)
+Content: Sea-level rise in mm, global/regional.
+Interesting:
+ Shows rising global sea levels.
+Missing values:
+ No values for landlocked countries.
+Supports:
+ J1: Only for comparison countries where relevant; Austria is shown with “no data” instead of zero.
+2. Task abstraction (15 points)
+User Group Activists from WWF:
+A1 — Investigate the relative impact of climate change across regions
+(domain task A1)
+WHY:
+Discover broad global patterns in climate impacts and identify regions experiencing elevated risk.
+WHAT:
+Country-level metrics:
+ Disaster frequency over time (dataset 14)
+ Temperature anomaly trends (dataset 23)
+ Sea-level rise (dataset 25, when available)
+HOW:
+ Explore the global overview map showing disaster frequency over time
+ Select a country to reveal detailed linked views
+ Encode differences in severity through color intensity, line slopes, and Sankey flow magnitude
+ Link all views so that selecting a region updates the line charts, ranking bars, and Sankey diagram
+Purpose:
+Provides an overview + detail-on-demand mechanism for understanding climate impacts globally.
+A2 — Rank countries according to a chosen climate-change metric
+(domain task A2)
+WHY:
+Compare countries to identify which regions show the highest values or strongest trends in selected climate indicators.
+WHAT:
+User-selected metric from:
+ Temperature increases over time
+ Disaster frequency trend
+ Sea-level rise trend (where available)
+HOW:
+Abdalrahman Mohammed 4 WS 25
+ Reconfigure the ranking bar chart based on the chosen metric
+ Derive trend values (e.g., slope of temperature increase, rate of disaster growth)
+ Filter to highlight top 5 countries + selected country
+ Select a metric via the bottom time-series panel (impact-over-time view)
+ Link the ranking chart with the time-series visualizations and world map
+Purpose:
+Supports comparative analysis for prioritizing regions of interest.
+A3 — Retrieve detailed climate-impact information for a selected country
+(domain task A3)
+WHY:
+Describe and understand the composition, trends, and hazard-type distribution of climate impacts for a single country.
+WHAT:
+For the selected country:
+ Disaster frequency by type (dataset 14)
+ Temperature change time series (dataset 23)
+ Sea-level rise time series (dataset 25, if applicable)
+ Total disaster distribution (floods, storms, droughts, etc.)
+HOW:
+ Select a country on the world map
+ Abstract/Elaborate by revealing more detailed views:
+o Line charts for temperature, sea level, disaster frequency
+o Sankey diagram for disaster-type distribution
+ Explore temporal patterns using time-series views
+ Link all updated views to maintain contextual understanding
+ Encode disaster distribution using proportional flows in the Sankey diagram
+Purpose:
+Provides detail-on-demand for targeted ecological assessment.
+User group Data Journalists:
+(J1) — Compare Austria’s climate-change indicators to other countries
+WHY:
+Present & Discover differences between Austria and other countries in climate-related financial and environmental indicators.
+WHAT:
+Country-level indicators: temperature change (23), CO₂ emissions or disaster exposure (14), environmental taxes (07), environmental protection
+expenditures (08), fossil fuel subsidies (09), and sea-level change where available (25).
+HOW:
+Select Austria; Select comparison country; Encode indicators in parallel visual formats (paired line charts or bar segments); Explore indicator
+differences; Hover for precise values; Link selections to update all views.
+(J2) — Compare discrepancy between environmental taxes and expenditures
+WHY:
+Discover mismatches between how much Austria collects in environmental taxes and how much it invests in environmental protection, relative to
+other countries.
+WHAT:
+Time-series values for environmental taxes (07) and environmental protection expenditures (08) per country.
+HOW:
+Select country from dropdown; Reconfigure discrepancy line chart (tax – expenditure); Explore differences over time; Click year to request
+detailed values; Hover for exact amounts; Link to a bar chart showing the two indicators side by side.
+(J3) — Analyze relationship between fossil fuel subsidies and environmental taxes
+WHY:
+Discover correlations or contradictions in national climate-policy signals (e.g., taxing polluters while subsidizing fossil fuels).
+WHAT:
+Cross-country pairs of indicators: fossil fuel subsidies (09) vs. environmental taxes (07).
+HOW:
+Encode values in a scatterplot; Highlight Austria; Select a country to activate detail mode; Explore distribution patterns; Hover to reveal exact
+amounts; Filter by selecting countries in other views; Link scatter selection to update comparison panels.
+3. Functionality and usability of the dashboards
+(10 points each per dashboard = 40 points)
+Dashboard 1: Activists from WWF
+Abdalrahman Mohammed 5 WS 25
+The WWF dashboard is designed to support Tasks A1–A3, enabling activists to investigate global climate-change impacts, compare
+countries, and retrieve detailed information about specific regions. The dashboard consists of four linked views, each providing a distinct
+analytical perspective:
+1. World Map Overview,
+2. Impact-Over-Time View (Three Line Charts),
+3. Ranking View,
+4. Disaster-Type Distribution (Sankey Diagram).
+The dashboard opens in overview mode, showing global patterns. Selecting any country shifts the dashboard into detail mode, where all
+views update to focus on the chosen region. A “Remove Selection” button returns the dashboard to the global overview state.
+Overview of Interactions and Linking
+The dashboard uses a bidirectional linking strategy, where actions in one view update all others. Key interactions include:
+ Selecting a country on the map updates the line charts, the Sankey diagram, and the ranking view.
+ Selecting a metric (temperature, sea-level, or disasters) from the line charts updates the ranking bar chart to show “Top 5 +
+selected country.”
+ Clicking on any point along the disaster-frequency time series updates the Sankey diagram to show the disaster-type
+distribution for that year.
+ Hovering over elements in any chart displays tooltips (title + precise value).
+ Hovering over countries on the map displays the country name.
+This ensures that all four views are coordinated, supporting exploratory analysis (A1), comparative ranking (A2), and detail-on-demand
+(A3).
+View 1 — World Map Overview
+Description
+The world map displays global disaster frequency using a choropleth or marker-based encoding. In overview mode, it animates or steps
+through time to illustrate how disaster frequency has evolved. In detail mode, selecting a country centers the dashboard on that region.
+Supported Tasks:
+ A1 (discover regional climate impacts)
+ A3 (select a country for details)
+Interactivity:
+ Hover: Shows country name and latest disaster frequency.
+ Click/Select: Filters all other views to the selected country.
+ “Remove selection” button: Returns to overview mode.
+Why a map for A1/A3?
+Maps provide the most intuitive geographic overview, enabling users to visually detect hotspots. Spatial tasks (locating affected regions,
+comparing continents) rely on geographic encodings, which match the natural mental model of WWF analysts.
+Usability Notes:
+ Uses color saturation (high contrast, perceptually ordered) to show disaster frequency.
+ No excessive labels to avoid clutter.
+ One-glance identification of high-risk areas → excellent expressiveness for A1.
+View 2 — Impact-Over-Time View (Three Linked Line Charts)
+(temperature change, sea-level rise, disaster frequency)
+Description
+Three small-multiple line charts show the long-term evolution of each climate metric. In overview mode, the charts show global averages; in
+detail mode, they show values for the selected country.
+Supported Tasks:
+ A1 (explore temporal climate impacts)
+ A2 (choose metric for ranking)
+ A3 (inspect detailed evolution for selected country)
+Interactivity:
+ Select metric: Clicking a line chart title sets the ranking chart to use that metric.
+Abdalrahman Mohammed 6 WS 25
+ Click on a line-node (year): Updates the Sankey diagram to show disaster types for that specific year.
+ Hover: Displays a tooltip with exact year + value.
+Why line charts for A1–A3?
+Line charts are optimal for trend-related tasks, enabling comparison of slopes and long-term changes. This supports identifying rapid
+warming, increasing disasters, or acceleration in sea-level rise.
+Usability Notes:
+ Three separate charts avoid overplotting and giving false relation.
+ Consistent x-axis (years) across all charts increases interpretability.
+ Color-coded lines match the metric selection mechanism.
+View 3 — Ranking of Countries by Selected Metric (Bar Chart)
+Description
+This vertical bar chart shows the Top 5 countries + selected country for the metric chosen via the line charts (temperature change, sea-
+level rise, disaster frequency). In overview mode, it displays the ranking for disaster frequency.
+Supported Tasks:
+ A2 (ranking countries based on user-selected metric)
+Interactivity:
+ Selecting a metric in the line chart updates the ranking automatically.
+ Hover displays the exact metric value.
+ Click on a country highlights it on the map and updates the detail views.
+Why bar charts for A2?
+Bar charts are optimal for ranking tasks because:
+ They provide a clear magnitude comparison.
+ Ordering encodes ranking naturally.
+ Length is one of the most accurate perceptual channel for quantitative values.
+View 4 — Disaster-Type Distribution (Sankey Diagram)
+Description
+The Sankey diagram shows the composition of disasters (floods, storms, droughts, heatwaves, etc.) for the selected country. By default, it
+uses the most recent year; selecting a point on the disaster-frequency line chart updates the diagram to that specific year.
+Supported Tasks:
+ A1 (understand relative impact of various climate hazards)
+ A3 (retrieve detailed information for a selected country)
+Interactivity:
+ Click on year in the disaster line chart → updates the Sankey diagram.
+ Hover over a flow → shows disaster type + count.
+ Automatically updates when a new country is selected.
+Why a Sankey diagram for A1/A3?
+WWF activists need to understand which hazards dominate in a country. A Sankey diagram communicates proportions and flows much
+more effectively than pie charts or stacked bars, especially when multiple categories exist.
+Dashboard for data journalists:
+View 1 — Relation Between Subsidies and Taxes (Scatter Plot)
+Description
+This scatter plot shows each country as a dot, with:
+ x-axis: fossil fuel subsidies (dataset 09)
+ y-axis: environmental taxes (dataset 07)
+Austria is highlighted in red; all others appear in grey. Selecting a country in any other view highlights it here; clicking a dot selects
+that country and switches the dashboard to detail mode.
+Supported Tasks:
+Abdalrahman Mohammed 7 WS 25
+ J3: Discover relationship between subsidies and taxes.
+ J1: Highlight Austria’s position relative to peers.
+Why a scatter plot?
+Scatter plots are the most effective encoding for relational tasks (J3), allowing journalists to detect correlations, outliers, and contradictions (e.g.,
+high taxes but also high subsidies). Position encodes magnitude precisely and avoids misinterpretation.
+Interactivity & Linking:
+ Hover: Shows country name and exact values.
+ Click: Selects country → updates all views (climate indicators panel, discrepancy chart, bar chart).
+ Linked selections: Selection in climate-indicator view highlights the dot here.
+View 2 — Climate-Change Indicators Panel (Paired Line Charts)
+Description
+This panel compares Austria to world averages (overview mode) or to a selected country (detail mode) across three indicators:
+ temperature anomaly (23)
+ CO₂ emissions or disaster frequency (using 14 or 04)
+ optional additional environmental variable
+Each indicator is displayed as a small-multiple line chart: red for Austria, blue for the comparison country.
+Supported Tasks:
+ J1: Compare Austria to other countries across multiple climate indicators.
+ J3: Selection here highlights the corresponding dot in the scatter plot.
+Why line charts?
+Line charts are optimal for temporal tasks (J1), showing long-term trajectories and enabling users to compare slopes, crossings, and divergences.
+Interactivity & Linking:
+ Dropdown menu: Select comparison country. Chosen over a map to enable rapid lookup of specific or small nations without
+zooming.Hover: Tooltip with exact year + value.
+ Linked: Selecting a country here highlights it in the scatter plot and updates the discrepancy and bar charts.
+ “Remove selection” button: Returns the dashboard to overview mode.
+View 3 — Discrepancy View (Taxes – Expenditures Line Chart)
+Description
+This view shows how much a country’s environmental tax revenue exceeds (or falls short of) its environmental protection expenditures over time.
+In overview mode: Austria vs world average
+In detail mode: Austria vs selected country
+Supported Tasks:
+ J2: Reveal discrepancies between taxes and expenditures.
+ J1: Provide context for Austria’s financial climate commitment.
+Why a line chart?
+The discrepancy is a derived time-series metric. Line charts effectively show whether the gap is widening or narrowing and allow direct slope
+comparison between Austria and another country.
+Interactivity & Linking:
+ Click on any point in the discrepancy chart → updates the detailed bar chart (View 4) for that specific year.
+ Hover: Shows the precise discrepancy value.
+ Linked to View 4: Year selection triggers a synchronized update.
+View 4 — Taxation vs Expenditure Detail (Bar Chart)
+Description
+This bottom view shows the raw values of:
+ environmental taxes (07)
+ environmental protection expenditures (08)
+for the country selected in any earlier interaction.
+Bars corresponding to the clicked year from the discrepancy chart are highlighted.
+Supported Tasks:
+ J2: Inspect detailed financial values for a selected year.
+ J1: Compare raw tax/spending levels clearly.
+Why a bar chart?
+Bar charts provide the most accurate magnitude comparison between discrete categories (tax vs expenditure) and are ideal for J2, where
+precision matters.
+Interactivity & Linking:
+ Hover: Shows country, year, and exact value.
+ Linked: Updates when a country is selected or a year is clicked in the discrepancy view.
+ Default: Shows Austria’s values without highlights in overview mode.
+4. Reflection (15 points)
+The WWF dashboard provides a balanced combination of overview, comparison, and detail views, enabling users to efficiently perform Tasks
+A1–A3. The world map and linked charts allow users to quickly identify climate-impact hotspots, compare trends, and retrieve detailed information
+about specific countries.
+Abdalrahman Mohammed 8 WS 25
+Efficiency for Users
+Users can complete core tasks rapidly because each visualization aligns with a specific analytical action. The world map supports immediate
+spatial understanding (A1), the line charts reveal temporal evolution without requiring additional navigation (A1, A3), the ranking bar chart enables
+fast comparison across countries (A2), and the Sankey diagram provides an intuitive breakdown of disaster types (A3). Interactions are minimal
+and direct—clicking or hovering is sufficient to access deeper information—leading to low cognitive load.
+Balancing Visual Encodings with Data Attributes
+Each visual encoding was chosen based on the perceptual effectiveness of the corresponding data type. Geographic patterns are best expressed
+spatially (map), temporal changes via slopes and trajectories (line charts), quantitative comparison through length (bar chart), and categorical
+composition via flow width (Sankey). Separating the three metrics into small multiples avoids overplotting and preserves clarity. This ensures all
+attributes—spatial, temporal, categorical—are encoded using the most expressive channels available.
+Overview vs. Detail View
+The overview views include the world map (global disaster patterns), the global-average line charts, and the initial ranking chart. Detail views
+include country-specific line charts, the Sankey diagram for disaster composition, and the ranking recalculated around the selected country. The
+“Remove Selection” button reinforces a clear separation between the two modes. This structure follows Shneiderman’s mantra: overview → zoom
+and filter → details on demand.
+Interaction Tradeoffs and Limitations
+The dashboard restricts interactions to essential actions (select, hover, filter), avoiding complex UI mechanisms that would slow down analysis.
+This improves usability but limits advanced manipulation such as multi-country comparison or user-defined data transformations. Another
+limitation is the Sankey diagram’s dependence on disaster-type availability; countries with sparse records may show limited detail. Sea-level
+change is unavailable for non-coastal regions, which may lead to empty or suppressed line charts, though this avoids misleading zero values.
+Linking Between Views
+All views are tightly linked: selecting a country updates the line charts, recomputes the ranking view, and refreshes the disaster-type distribution.
+Selecting a year on the disaster-frequency chart updates the Sankey diagram for that specific year. The map selection also synchronizes tooltips
+and highlights across charts. This coordinated linking enables smooth navigation between global context and specific details and ensures that
+every task (A1–A3) is supported with minimal effort.
+The Data Journalist Dashboard is optimized for rapid comparison, discrepancy detection, and relational analysis of Austria’s climate-related
+financial indicators. It allows users to easily identify how Austria differs from other countries and to understand underlying policy contradictions.
+The design emphasizes clarity, minimal interaction overhead, and strong linked-view coordination.
+Efficiency of User Tasks
+Journalists can complete core tasks quickly because each view is purpose-built for its corresponding analytical need. The climate-indicators panel
+(overview mode) enables immediate comparison between Austria and world averages for temperature, CO₂ emissions, and disaster frequency
+(J1). The subsidies–taxes scatter plot allows fast identification of whether Austria aligns with peers (J3), while the discrepancy view highlights
+mismatches between taxes and environmental expenditures (J2). Selecting a country instantly updates all relevant views, allowing journalists to
+pivot between comparison targets with minimal friction.
+Balancing Effective Visual Encodings and Data Complexity
+Each dataset is encoded using a visualization type that maximizes perceptual accuracy.
+ Scatter plot: position encodes subsidies and taxes, ideal for correlation tasks (J3).
+ Line charts: support temporal trend exploration (J1, J2).
+ Bar charts: provide accurate magnitude comparison for taxation vs. expenditure details (J2).
+Grouping indicators into small multiples avoids overplotting and preserves clarity, even when comparing Austria to another country.
+Overview vs. Detail Views
+The overview views include the climate-indicator panel (Austria vs world), the scatter plot (all countries), and the discrepancy view comparing
+Austria to global trends.
+Detail views appear after selection: the indicator panel switches to Austria vs selected country, the discrepancy view updates to the chosen
+comparison, and the bottom bar chart reveals specific tax/expenditure values for a selected year. This aligns with the recommended workflow of
+overview → zoom/filter → details on demand.
+Interaction Tradeoffs and Limitations
+Interactions were intentionally limited to simple operations—selecting a country, clicking a data point, and hovering for details—to maintain
+accessibility for nontechnical users. This simplicity improves usability but limits more advanced comparisons like selecting multiple countries
+simultaneously. Another limitation is that data availability varies across indicators (e.g., some countries have partial subsidy records), which may
+restrict the interpretability of the scatter plot. Austria’s landlocked status also limits relevance of sea-level data, though this is handled by
+suppressing values rather than misrepresenting them. We selected a drop-down over a map to prioritize known-item lookup (Task J1) and
+conserve screen space for complex financial charts.
+Linking Between Views
+The dashboard uses consistent bidirectional linking:
+ Selecting a country updates the indicator panel, the discrepancy view, and highlights the corresponding dot in the scatter plot.
+ Selecting a year in the discrepancy view updates the bar chart.
+ Interaction in the indicator panel or scatter plot keeps the user’s context intact across views.
+This coordinated linking ensures that Tasks J1–J3 can be performed smoothly and supports seamless movement between high-level
+comparison and detailed financial inspection.
+5. Conclusion (5 points)
+This report presented two dashboard designs tailored to the distinct analytical needs of WWF activists and data journalists. Both dashboards apply
+essential visualization principles by using spatial encodings for geographic patterns, line charts for temporal trends, bar charts for magnitude
+comparisons, and coordinated multiple views to support the workflow of overview → zoom/filter → details on demand.
+The WWF dashboard emphasizes exploration of global climate impacts, enabling users to investigate regional hazards, compare countries, and
+obtain detailed ecological information. The Data Journalist dashboard prioritizes clarity in financial and policy-related indicators, supporting efficient
+comparison between Austria and other countries, discrepancy detection, and relational analysis between subsidies and environmental taxes.
+Interactions were intentionally kept simple—primarily selection, clicking, and hovering—to minimize cognitive load while preserving expressive
+analytical capability. The main tradeoffs concern the restriction to single-country comparisons and variations in data completeness across indicators.
+Abdalrahman Mohammed 9 WS 25
+Appendix
+User group: Activists from WWF:
+1- Ideation
+General Goal:
+Support WWF activists in:
+ Investigating climate-impact severity across world regions (A1).
+ Ranking countries by chosen climate-change metrics (A2).
+ Retrieving detailed information for a single country (A3).
+Datasets used:
+ Dataset 14: Climate-related Disaster Frequency
+ Dataset 23: Annual Surface Temperature Change
+ Dataset 25: Change in Mean Sea Levels
+Early ideas (sketch-level reasoning):
+ World map with hazard intensity encoded in color → click country → details.
+ Dropdown-based selection for users who prefer direct lookup instead of geographic navigation.
+ Pie chart to summarize disaster-type distribution; maybe expandable into a detailed time-series view.
+ Temporal comparison using small multiple line charts (temperature, disasters, sea-level).
+ Ranking interaction: metric selection → bar chart updates.
+ Alternative layout using one combined multi-line chart instead of three separate ones.
+ Alternative detail view showing last 5 years of a chosen metric, each bar comparing country value to global mean.
+ Sankey diagram for disaster-type distribution instead of pie chart (more expressive for flows).
+ Pop-up vs inline detail views depending on screen clarity.
+ Static map vs dynamic choropleth depending on performance and clarity.
+Potential interaction mechanisms:
+ Clicking pie sectors → open detail panel.
+ Hover tooltips for temporal precision.
+ Country selection either on map or dropdown.
+ Ranking metric toggle using dropdown or by clicking chart titles.
+Abdalrahman Mohammed 10 WS 25
+2- Design 1
+Core interaction model:
+Country selection happens through a central dropdown. The map is not the primary view.
+Pie chart acts as a gateway to a secondary detail view (pop-up).
+Layout Description:
+Views & Functions:
+1. Country Selection Dropdown (Center)
+ Primary control element.
+ User selects one country.
+ All views refresh accordingly.
+2. Pie Chart — Disaster-Type Distribution
+ Shows share of flood, storm, drought, etc. based on Dataset 14.
+ Clicking a pie slice opens a pop-up view containing a line chart showing the time series for that specific disaster type.
+ Serves A1 and A3.
+3. Line Chart Pop-Up (Disaster-Type Over Time)
+ Displays annual counts for the selected disaster type.
+ Supports A3 (detail retrieval).
+4. Ranking View (Selectable Metric)
+ Dropdown above chart allows choosing ranking metric:
+o Disaster total
+o Temperature change trend
+o Sea-level change
+ Bar chart displays top countries accordingly.
+ Supports A2.
+5. Multi-bar Temporal Comparison Chart
+ Three bars per year (for example) representing different climate indicators.
+ Quick comparison for A1.
+Strengths:
+ Highly controlled interaction flow (dropdown first).
+ Pie-chart popup provides clean progressive disclosure.
+Weaknesses:
+ Heavy reliance on dropdowns (which is penalized unless justified).
+ Pop-ups are discouraged unless strictly necessary.
+Abdalrahman Mohammed 11 WS 25
+3- Design 2
+Interaction model:
+User selects a country from a static, non-animated world map.
+Temporal information is consolidated into a single multi-line chart to reduce space.
+Layout Description:
+Views & Functions:
+1. Static World Map (Top Center)
+ Used ONLY for selecting a country.
+ No choropleth; only outlines → simplifies aesthetics.
+ Supports A3 (country selection).
+2. Pie Chart with Popup
+ Same as in Idea 1: clicking slice → pop-up time-series for that disaster type.
+3. Combined Multi-Line Chart (Middle)
+ A single view merging:
+o Temperature anomaly (Dataset 23)
+o Disaster frequency (Dataset 14)
+o Sea-level rise (Dataset 25 where available)
+ Each metric is a differently colored line.
+ Supports A1.
+4. Detailed Last-Years Panel (Left)
+ Provides values for, e.g., the last 5 years of the selected metric.
+ Bars compare:
+o Country value
+o Global value
+ Supports A3.
+5. Ranking View (Left-Lower Corner)
+ Similar to Idea 1 but placed more prominently.
+ Supports A2.
+Strengths:
+ Combined line chart simplifies view organization.
+ Detailed last-years panel offers immediate recent-context insight.
+Weaknesses:
+ Combined line chart risks overplotting.
+ Still uses a pie chart popup (penalized unless well justified).
+Abdalrahman Mohammed 12 WS 25
+4- Design 3
+Layout Description:
+Views & Functions:
+1. Map Overview (Top)
+ Choropleth showing disaster frequency.
+ Select a country → entire dashboard switches to detail mode.
+ Supports A1, A3.
+2. Three Line Charts (Bottom Row)
+One for each dataset:
+ Temperature anomaly (Dataset 23)
+ Sea-level rise (Dataset 25)
+ Disaster frequency (Dataset 14)
+Interactions:
+ Clicking a chart title sets ranking metric.
+ Clicking a point in the disaster chart updates the Sankey distribution for that year.
+Supports A1, A2, A3.
+3. Ranking View (Left)
+ Vertical bar chart showing Top 5 + selected country.
+ Supports A2.
+4. Sankey Diagram (Right)
+ Encodes disaster-type distribution for the selected country.
+ Strength over pie: can show proportions and flows clearly.
+ Updates when a new year is selected in the disaster line chart.
+ Supports A3.
+Strengths:
+ Fully avoids pop-ups or dropdown dependency.
+ Uses small multiples for temporal transparency.
+ Uses Sankey instead of pie chart for better categorical comparison.
+Weaknesses:
+ Requires more screen space.
+ Three line charts might overwhelm naïve users (but activists are expert-level users).
+Abdalrahman Mohammed 13 WS 25
+5- Realization
+Abdalrahman Mohammed 14 WS 25
+User Group Data Journalists:
+1- Ideation
+Goal of Data Journalists:
+ Compare Austria to other countries using climate and policy indicators.
+ Inspect discrepancies between environmental taxes and expenditures.
+ Identify contradictions between fossil fuel subsidies and environmental taxes.
+(Matches the domain tasks J1–J3 in your A4 report.)
+Datasets used:
+ Dataset 04: CO₂ emissions
+ Dataset 07: Environmental taxes
+ Dataset 08: Environmental protection expenditures
+ Dataset 09: Fossil fuel subsidies
+ Dataset 14: Climate-related disaster frequency
+ Dataset 23: Surface temperature change
+ Dataset 25: Mean sea-level change
+Early conceptual sketches / idea fragments:
+ A world map colored by a climate indicator score (composed of CO₂ emissions, temperature anomaly, disaster frequency, sea-level trend).
+ Journos select a country on map → see Austria vs. that country.
+ Paired line charts comparing Austria vs selected country for taxes/expenditures/temperature/CO₂.
+ Donut or bar breakdown for tax or expenditure categories upon clicking a time-series point.
+ Scatterplot showing fossil fuel subsidies vs environmental taxes (Austria highlighted).
+ Combined “bar relation view” comparing subsidy/taxation difference for many countries.
+ Option: one large scatterplot (similar to final concept in A4) + smaller disaggregated indicator charts.
+ Idea of using two-level detail:
+o Overview (map + scatterplot)
+o Detail (country-specific trends + breakdown distributions).
+Selection mechanisms:
+ Map-based selection (color-coded by climate score).
+ Alternative: dropdown; but avoided unless necessary.
+ Clicking a time-series point opens distribution view (tax or expenditure categories).
+Temporal considerations:
+ Map shows only latest available year to avoid clutter.
+ Line charts show full historical evolution.
+Abdalrahman Mohammed 15 WS 25
+2- Design 1
+Concept Summary:
+A color-coded climate-score map allows quick identification of countries with notable climate or policy patterns. Line charts flank the map, comparing Austria with any
+selected country. Each line chart links to a donut-chart breakdown. A scatterplot at bottom matches the one in the main dashboard.
+1. Climate Score World Map (Top Left)
+ Color scheme = climate score derived from:
+CO₂ (04), temperature (23), sea-level (25), disaster frequency (14).
+ Shows latest year only.
+ Selection → updates all views.
+Supports J1.
+2. Line Chart: Environmental Taxes (Left)
+ Austria vs selected country.
+ Clicking a point → shows donut chart with taxation distribution (energy, transport, resources, etc.).
+Uses dataset 07 and its subcategories.
+Supports J2.
+3. Line Chart: Environmental Expenditures (Right)
+ Austria vs selected country.
+ Clicking a point → opens expenditure-distribution donut (analogous to taxation).
+Uses dataset 08.
+Supports J2.
+4. Donut Chart (Left) — Tax Categories Breakdown
+ Shows how the selected year’s taxes are distributed.
+ Temporary pop-up view.
+5. Donut Chart (Right) — Expenditure Categories Breakdown
+ Same idea but for expenditures.
+6. Scatter Plot (Bottom)
+ X-axis: fossil fuel subsidies (09).
+ Y-axis: environmental taxes (07).
+ Austria highlighted (consistent with final dashboard).
+Supports J3.
+Strengths
+ Strong separation between fiscal breakdown (donuts), temporal evolution (lines), and global context (map).
+ Easy to understand for news audiences.
+Weaknesses
+ Pop-ups may be penalized unless justified.
+ Map interpretation depends heavily on climate score transparency.
+Abdalrahman Mohammed 16 WS 25
+3- Design 2
+Concept Summary:
+This design keeps the climate-score map but emphasizes temporal comparison: two large line charts (top = selected country; bottom = Austria). A central panel presents
+distribution of categories based on selected time-series point. Right side shows a combined subsidy/taxation bar chart.
+1. Climate Score Map (Top Center)
+ Same scoring method as Idea 1.
+ Displays most recent year.
+ User selects comparison country.
+Supports J1.
+2. Upper Line Chart (Selected Country)
+ Time series for expenditure (08) and taxation (07).
+ Clicking a point triggers update of central distribution bar.
+Supports J2.
+3. Lower Line Chart (Austria)
+ Same variables, Austria baseline.
+ Visual parallelism allows easy comparison.
+Supports J1, J2.
+4. Central Distribution Bar
+ Horizontal stacked bar showing category distribution for tax or expenditure of the clicked point (depending on which chart was clicked).
+ Represents categories such as energy, transport, waste, etc.
+Supports J2.
+5. Combined Subsidy–Tax Bar Chart (Right)
+ Shows two bars per country:
+o Fossil fuel subsidies (09)
+o Environmental taxes (07)
+ Easy magnitude comparison.
+ Strong complement to scatterplot in Idea 1.
+Supports J3.
+Strengths
+ Very clear Austria vs country comparison via two parallel line charts.
+ Central distribution panel avoids pop-ups.
+ Combined bar chart simplifies relational comparison.
+Weaknesses
+ More space-consuming.
+ Lacks scatterplot relational insight unless added below.
+Abdalrahman Mohammed 17 WS 25
+4- Design 3
+1. Scatter Plot (Top Left)
+ X-axis: fossil fuel subsidies (09).
+ Y-axis: environmental taxes (07).
+ Austria always highlighted in red.
+ Selecting a country updates all other views.
+Supports J3.
+2. Indicator Comparison Panel (Top Right)
+ Small multiple line charts comparing:
+o Temperature anomaly (23)
+o Disaster frequency or CO₂ emissions (14 or 04)
+o Optional: sea-level where available (25)
+ Red = Austria, blue = selected country (or world average in overview mode).
+Supports J1.
+3. Discrepancy Line Chart (Center)
+ Shows (tax – expenditure) over time for Austria vs selected country.
+ Selecting a year updates the detailed bar chart.
+Uses datasets 07 & 08.
+Supports J2.
+4. Taxation vs Expenditure Detail Bar Chart (Bottom)
+ Two bars for selected year: environmental taxes (07) and expenditures (08).
+ Updates whenever a time-series point is clicked in the discrepancy chart.
+Supports J2.
+Strengths
+ Minimal interaction complexity—ideal for journalists.
+ Strong coordination between all views.
+ No pop-ups; avoids sliders and dropdowns except country selector.
+ Aligns directly with your A4 text and grading guidelines.
+Weaknesses
+ Lacks global map for spatial overview.
+ Emphasizes relational/financial analysis rather than broader climate context.
+Abdalrahman Mohammed 18 WS 25
+5- Realization
+AI Usage
+AI was used in this assignment for exploring Ideas, researching topics, reformatting text and
+searching chart names
