@@ -15,6 +15,9 @@ function buildLayout(root) {
         <div class="header-center">
           <div class="title">Austria climate-policy comparison dashboard</div>
           <div class="subtitle" id="stateText"></div>
+          <div class="hint" id="hintText">
+            Tip: click a dot to select a country · click the discrepancy chart to select a year
+          </div>
         </div>
         <div class="header-actions">
           <button id="resetBtn" type="button">Reset</button>
@@ -53,6 +56,7 @@ function buildLayout(root) {
 
   return {
     stateText: root.querySelector('#stateText'),
+    hintText: root.querySelector('#hintText'),
     resetBtn: root.querySelector('#resetBtn'),
     scatterEl: root.querySelector('#scatter'),
     indicatorsEl: root.querySelector('#indicators'),
@@ -75,11 +79,14 @@ export async function initDashboard(rootEl) {
   function updateHeader(state) {
     if (!state.selectedCountryIso3) {
       els.stateText.textContent = 'Comparing Austria vs World average'
+      els.hintText.textContent =
+        'Tip: click a dot to select a country · click the discrepancy chart to select a year'
       return
     }
 
     const name = data.countryNameByIso3.get(state.selectedCountryIso3) ?? state.selectedCountryIso3
     els.stateText.textContent = `Comparing Austria vs ${name}`
+    els.hintText.textContent = 'Tip: click the discrepancy chart to select a year · Reset clears selection'
   }
 
   store.subscribe(updateHeader)
