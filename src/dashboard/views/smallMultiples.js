@@ -25,17 +25,16 @@ function computeRecentWindowStart({ aSeries, bSeries, innerWidth, innerHeight, m
   const minYear = d3.min([aExt?.[0], bExt?.[0]].filter((d) => d != null))
   if (maxYear == null || minYear == null) return null
 
+  // Backwards-compat: old 'auto' behaves like '30y'
+  if (mode === 'auto') mode = '30y'
+
   if (mode === 'full') return null
 
   if (mode === '20y') return Math.max(minYear, maxYear - 20)
+  if (mode === '30y') return Math.max(minYear, maxYear - 30)
   if (mode === '35y') return Math.max(minYear, maxYear - 35)
 
-  // If the chart is small, shorten the time window to keep the line readable.
-  const cramped = innerWidth < 420 || innerHeight < 105
-  const yearsToShow = cramped ? 20 : 35
-  const start = Math.max(minYear, maxYear - yearsToShow)
-
-  return start
+  return null
 }
 
 function buildLineChart({
@@ -225,8 +224,8 @@ export function createSmallMultiplesView({ el, data, store, countryNameByIso3 })
   topBar.innerHTML = `
     <div class="indicators-legend" id="indLegend"></div>
     <div class="btn-group" id="winGroup">
-      <button type="button" data-win="auto">Auto</button>
       <button type="button" data-win="20y">20y</button>
+      <button type="button" data-win="30y">30y</button>
       <button type="button" data-win="35y">35y</button>
       <button type="button" data-win="full">Full</button>
     </div>
@@ -266,7 +265,8 @@ export function createSmallMultiplesView({ el, data, store, countryNameByIso3 })
     `
 
     // Update active window button
-    const mode = state.indicatorWindow ?? 'full'
+    let mode = state.indicatorWindow ?? 'full'
+    if (mode === 'auto') mode = '30y'
     winGroup.querySelectorAll('button[data-win]').forEach((btn) => {
       btn.classList.toggle('active', btn.dataset.win === mode)
     })
