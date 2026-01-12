@@ -42,12 +42,16 @@ body {
 }
 
 .header {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: flex-end;
-  justify-content: space-between;
   padding: 14px 18px 10px;
   border-bottom: 1px solid var(--grid);
   background: linear-gradient(180deg, rgba(18, 26, 51, 0.95) 0%, rgba(18, 26, 51, 0.72) 100%);
+}
+
+.header-center {
+  text-align: center;
 }
 
 .title {
@@ -65,6 +69,7 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
+  justify-self: end;
 }
 
 button {

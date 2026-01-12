@@ -11,7 +11,8 @@ function buildLayout(root) {
   root.innerHTML = `
     <div class="app">
       <header class="header">
-        <div>
+        <div class="header-spacer" aria-hidden="true"></div>
+        <div class="header-center">
           <div class="title">Austria climate-policy comparison dashboard</div>
           <div class="subtitle" id="stateText"></div>
         </div>
