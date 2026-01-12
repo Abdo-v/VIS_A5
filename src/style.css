@@ -127,6 +127,11 @@ button:hover {
   min-height: 0;
 }
 
+.panel-body.with-topbar {
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
 .panel-body > .chart,
 .panel-body > svg {
   width: 100%;

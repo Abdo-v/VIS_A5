@@ -22,10 +22,23 @@ function pickDefaultYear({ taxesSeries, expSeries }) {
 export function createBarsView({ el, data, store, countryNameByIso3 }) {
   const tooltip = createTooltip()
 
+  el.innerHTML = ''
+  el.classList.add('with-topbar')
+
+  const topBar = document.createElement('div')
+  topBar.className = 'indicators-topbar'
+  topBar.innerHTML = `
+    <div class="indicators-legend" id="barsLegend">
+      <span class="legend-item"><span class="swatch" style="background: var(--color-tax)"></span>Taxes</span>
+      <span class="legend-item"><span class="swatch" style="background: var(--color-exp)"></span>Expenditures</span>
+    </div>
+  `
+  el.appendChild(topBar)
+
   const svg = d3.select(el).append('svg').attr('class', 'chart')
   const g = svg.append('g')
 
-  const title = svg.append('text').attr('class', 'chart-title')
+  const title = svg.append('text').attr('class', 'chart-title').attr('text-anchor', 'middle')
   const xAxisG = g.append('g').attr('class', 'axis')
   const yAxisG = g.append('g').attr('class', 'axis')
 
@@ -63,7 +76,7 @@ export function createBarsView({ el, data, store, countryNameByIso3 }) {
     const defaultYear = pickDefaultYear({ taxesSeries: aTaxes, expSeries: aExp })
     const year = state.selectedYear ?? defaultYear
 
-    title.text(`Detail: Taxes vs Expenditures (${year ?? 'N/A'})`).attr('x', margin.left).attr('y', 18)
+    title.text(`Detail: Taxes vs Expenditures (${year ?? 'N/A'})`).attr('x', width / 2).attr('y', 18)
 
     const rows = [
       {
@@ -151,19 +164,6 @@ export function createBarsView({ el, data, store, countryNameByIso3 }) {
         (exit) => exit.remove(),
       )
 
-    // Legend
-    svg
-      .selectAll('text.legend')
-      .data([
-        { label: 'Taxes', color: 'var(--color-tax)' },
-        { label: 'Expenditures', color: 'var(--color-exp)' },
-      ])
-      .join((enter) => enter.append('text').attr('class', 'legend'), (update) => update)
-      .attr('x', (d, i) => margin.left + i * 120)
-      .attr('y', height - 6)
-      .text((d) => d.label)
-      .attr('fill', (d) => d.color)
-      .style('font-size', '11px')
   }
 
   const unsub = store.subscribe(render)

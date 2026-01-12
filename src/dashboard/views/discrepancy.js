@@ -24,13 +24,22 @@ function computeDiscrepancySeries({ taxesSeries, expSeries }) {
 export function createDiscrepancyView({ el, data, store, countryNameByIso3 }) {
   const tooltip = createTooltip()
 
+  el.innerHTML = ''
+  el.classList.add('with-topbar')
+
+  const topBar = document.createElement('div')
+  topBar.className = 'indicators-topbar'
+  topBar.innerHTML = `<div class="indicators-legend" id="discLegend"></div>`
+  el.appendChild(topBar)
+  const legendEl = topBar.querySelector('#discLegend')
+
   const svg = d3.select(el).append('svg').attr('class', 'chart')
   const g = svg.append('g')
 
   const xAxisG = g.append('g').attr('class', 'axis')
   const yAxisG = g.append('g').attr('class', 'axis')
 
-  const title = svg.append('text').attr('class', 'chart-title')
+  const title = svg.append('text').attr('class', 'chart-title').attr('text-anchor', 'middle')
 
   const xLabel = svg.append('text').attr('class', 'axis-label').attr('text-anchor', 'middle')
   const yLabel = svg.append('text').attr('class', 'axis-label').attr('text-anchor', 'middle')
@@ -51,10 +60,15 @@ export function createDiscrepancyView({ el, data, store, countryNameByIso3 }) {
     const innerW = Math.max(10, width - margin.left - margin.right)
     const innerH = Math.max(10, height - margin.top - margin.bottom)
 
-    title.text('Taxation–Expenditure discrepancy').attr('x', margin.left).attr('y', 18)
+    title.text('Taxation–Expenditure discrepancy').attr('x', width / 2).attr('y', 18)
 
     const selected = state.selectedCountryIso3
     const compName = selected ? (countryNameByIso3.get(selected) ?? selected) : 'World average'
+
+    legendEl.innerHTML = `
+      <span class="legend-item"><span class="swatch" style="background: var(--color-austria)"></span>Austria</span>
+      <span class="legend-item"><span class="swatch" style="background: var(--color-selected)"></span>${compName}</span>
+    `
 
     const aTaxes = data.metrics.taxes.get(AUSTRIA_ISO3)?.series ?? []
     const aExp = data.metrics.expenditures.get(AUSTRIA_ISO3)?.series ?? []
@@ -167,19 +181,6 @@ export function createDiscrepancyView({ el, data, store, countryNameByIso3 }) {
         store.setState({ selectedYear: year })
       })
 
-    // Legend
-    svg
-      .selectAll('text.legend')
-      .data([
-        { label: 'Austria', color: 'var(--color-austria)' },
-        { label: compName, color: 'var(--color-selected)' },
-      ])
-      .join((enter) => enter.append('text').attr('class', 'legend'), (update) => update)
-      .attr('x', (d, i) => margin.left + i * 140)
-      .attr('y', height - 6)
-      .text((d) => d.label)
-      .attr('fill', (d) => d.color)
-      .style('font-size', '11px')
   }
 
   const unsub = store.subscribe(render)
