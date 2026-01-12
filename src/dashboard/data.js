@@ -1,6 +1,13 @@
 import * as d3 from 'd3'
 import { parseMaybeNumber } from './format.js'
 
+function assetUrl(path) {
+  const base = import.meta.env.BASE_URL ?? '/'
+  const normalizedBase = base.endsWith('/') ? base : `${base}/`
+  const normalizedPath = String(path ?? '').replace(/^\//, '')
+  return `${normalizedBase}${normalizedPath}`
+}
+
 const ISO3_RE = /^[A-Z]{3}$/
 
 function isCountryRow(row) {
@@ -152,27 +159,27 @@ export async function loadDashboardData() {
 
   const [taxes, expenditures, subsidies, disasters, temperature] = await Promise.all([
     loadWideSeries({
-      url: '/data/07_Environmental_Taxes.csv',
+      url: assetUrl('data/07_Environmental_Taxes.csv'),
       indicatorMatch: 'Environmental Taxes',
       unitMatch: 'Percent of GDP',
     }),
     loadWideSeries({
-      url: '/data/08_Environmental_Protection_Expenditures.csv',
+      url: assetUrl('data/08_Environmental_Protection_Expenditures.csv'),
       indicatorMatch: 'Expenditure on environment protection',
       unitMatch: 'Percent of GDP',
     }),
     loadWideSeries({
-      url: '/data/09_Fossil_Fuel_Subsidies.csv',
+      url: assetUrl('data/09_Fossil_Fuel_Subsidies.csv'),
       indicatorMatch: 'Fossil Fuel Subsidies - Total Implicit and Explicit',
       unitMatch: 'Percent of GDP',
     }),
     loadWideSeries({
-      url: '/data/14_Climate-related_Disasters_Frequency.csv',
+      url: assetUrl('data/14_Climate-related_Disasters_Frequency.csv'),
       indicatorMatch: 'Climate related disasters frequency, Number of Disasters: TOTAL',
       unitMatch: 'Number of',
     }),
     loadWideSeries({
-      url: '/data/23_Annual_Surface_Temperature_Change.csv',
+      url: assetUrl('data/23_Annual_Surface_Temperature_Change.csv'),
       indicatorMatch:
         'Temperature change with respect to a baseline climatology, corresponding to the period 1951-1980',
       unitMatch: 'Degree Celsius',
