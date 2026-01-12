@@ -68,6 +68,7 @@ export async function initDashboard(rootEl) {
   const store = createStore({
     selectedCountryIso3: null,
     selectedYear: null,
+    indicatorWindow: 'auto',
   })
 
   function updateHeader(state) {

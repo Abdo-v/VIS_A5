@@ -16,7 +16,7 @@ function clipSeriesToWindow(series, minYear) {
   return series.filter((d) => d.year >= minYear)
 }
 
-function computeRecentWindowStart({ aSeries, bSeries, innerWidth, innerHeight }) {
+function computeRecentWindowStart({ aSeries, bSeries, innerWidth, innerHeight, mode }) {
   const aExt = extentYears(aSeries)
   const bExt = extentYears(bSeries)
   if (!aExt && !bExt) return null
@@ -24,6 +24,11 @@ function computeRecentWindowStart({ aSeries, bSeries, innerWidth, innerHeight })
   const maxYear = d3.max([aExt?.[1], bExt?.[1]].filter((d) => d != null))
   const minYear = d3.min([aExt?.[0], bExt?.[0]].filter((d) => d != null))
   if (maxYear == null || minYear == null) return null
+
+  if (mode === 'full') return null
+
+  if (mode === '20y') return Math.max(minYear, maxYear - 20)
+  if (mode === '35y') return Math.max(minYear, maxYear - 35)
 
   // If the chart is small, shorten the time window to keep the line readable.
   const cramped = innerWidth < 420 || innerHeight < 105
@@ -75,6 +80,7 @@ function buildLineChart({
       bSeries: compSeries,
       innerWidth: innerW,
       innerHeight: innerH,
+      mode: state.indicatorWindow ?? 'auto',
     })
 
     const aSeriesClipped = clipSeriesToWindow(austriaSeries, startYear)
@@ -151,19 +157,6 @@ function buildLineChart({
       (exit) => exit.remove(),
     )
 
-    // Tiny legend text
-    svg
-      .selectAll('text.sm-legend')
-      .data([
-        { label: 'Austria', color: colorA },
-        { label: compName, color: colorB },
-      ])
-      .join((enter) => enter.append('text').attr('class', 'sm-legend'), (update) => update)
-      .attr('x', (d, i) => margin.left + i * 140)
-      .attr('y', height - 6)
-      .text((d) => d.label)
-      .attr('fill', (d) => d.color)
-      .style('font-size', '11px')
   }
 
   return { render, svg }
@@ -226,6 +219,22 @@ export function createSmallMultiplesView({ el, data, store, countryNameByIso3 })
 
   el.innerHTML = ''
 
+  const topBar = document.createElement('div')
+  topBar.className = 'indicators-topbar'
+  topBar.innerHTML = `
+    <div class="indicators-legend" id="indLegend"></div>
+    <div class="btn-group" id="winGroup">
+      <button type="button" data-win="auto">Auto</button>
+      <button type="button" data-win="20y">20y</button>
+      <button type="button" data-win="35y">35y</button>
+      <button type="button" data-win="full">Full</button>
+    </div>
+  `
+  el.appendChild(topBar)
+
+  const legendEl = topBar.querySelector('#indLegend')
+  const winGroup = topBar.querySelector('#winGroup')
+
   const containers = blocks.map(() => {
     const div = document.createElement('div')
     div.className = 'sm-block'
@@ -246,8 +255,29 @@ export function createSmallMultiplesView({ el, data, store, countryNameByIso3 })
   )
 
   function render(state) {
+    // Update legend text (kept outside SVG so it never overlaps axes)
+    const selected = state.selectedCountryIso3
+    const compName = selected ? (countryNameByIso3.get(selected) ?? selected) : 'World average'
+
+    legendEl.innerHTML = `
+      <span class="legend-item"><span class="swatch" style="background: var(--color-austria)"></span>Austria</span>
+      <span class="legend-item"><span class="swatch" style="background: var(--color-selected)"></span>${compName}</span>
+    `
+
+    // Update active window button
+    const mode = state.indicatorWindow ?? 'auto'
+    winGroup.querySelectorAll('button[data-win]').forEach((btn) => {
+      btn.classList.toggle('active', btn.dataset.win === mode)
+    })
+
     charts.forEach((c, i) => c.render(state, data, i === charts.length - 1))
   }
+
+  winGroup.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-win]')
+    if (!btn) return
+    store.setState({ indicatorWindow: btn.dataset.win })
+  })
 
   const unsub = store.subscribe(render)
   window.addEventListener('resize', () => render(store.getState()))

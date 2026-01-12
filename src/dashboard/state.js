@@ -15,9 +15,7 @@ export function createStore(initialState) {
 
   function setState(patch) {
     const next = { ...state, ...patch }
-    const changed =
-      next.selectedCountryIso3 !== state.selectedCountryIso3 ||
-      next.selectedYear !== state.selectedYear
+    const changed = Object.keys(next).some((k) => next[k] !== state[k])
 
     state = next
     if (changed) {
