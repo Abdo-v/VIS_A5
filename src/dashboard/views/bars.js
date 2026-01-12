@@ -35,7 +35,11 @@ export function createBarsView({ el, data, store, countryNameByIso3 }) {
   `
   el.appendChild(topBar)
 
-  const svg = d3.select(el).append('svg').attr('class', 'chart')
+  const chartHost = document.createElement('div')
+  chartHost.className = 'chart-host'
+  el.appendChild(chartHost)
+
+  const svg = d3.select(chartHost).append('svg').attr('class', 'chart')
   const g = svg.append('g')
 
   const title = svg.append('text').attr('class', 'chart-title').attr('text-anchor', 'middle')
@@ -46,8 +50,8 @@ export function createBarsView({ el, data, store, countryNameByIso3 }) {
   const yLabel = svg.append('text').attr('class', 'axis-label').attr('text-anchor', 'middle')
 
   function render(state) {
-    const width = el.clientWidth
-    const height = el.clientHeight
+    const width = chartHost.clientWidth
+    const height = chartHost.clientHeight
     const margin = { top: 28, right: 16, bottom: 44, left: 54 }
 
     svg.attr('width', width).attr('height', height)

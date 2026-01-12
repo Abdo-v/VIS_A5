@@ -31,7 +31,7 @@ export function createScatterView({ el, data, store }) {
   const xLabel = svg.append('text').attr('class', 'axis-label').attr('text-anchor', 'middle')
   const yLabel = svg.append('text').attr('class', 'axis-label').attr('text-anchor', 'middle')
 
-  const subtitle = svg.append('text').attr('class', 'chart-subtitle')
+  const subtitle = svg.append('text').attr('class', 'chart-subtitle').attr('text-anchor', 'middle')
 
   const pointsG = g.append('g')
 
@@ -47,7 +47,7 @@ export function createScatterView({ el, data, store }) {
     const innerH = Math.max(10, height - margin.top - margin.bottom)
 
     const year = data.scatterYear
-    subtitle.text(`Year: ${year ?? 'N/A'} (latest common year)`).attr('x', margin.left).attr('y', 18)
+    subtitle.text(`Year: ${year ?? 'N/A'} (latest common year)`).attr('x', width / 2).attr('y', 18)
 
     const rows = []
 

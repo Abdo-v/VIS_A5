@@ -33,7 +33,11 @@ export function createDiscrepancyView({ el, data, store, countryNameByIso3 }) {
   el.appendChild(topBar)
   const legendEl = topBar.querySelector('#discLegend')
 
-  const svg = d3.select(el).append('svg').attr('class', 'chart')
+  const chartHost = document.createElement('div')
+  chartHost.className = 'chart-host'
+  el.appendChild(chartHost)
+
+  const svg = d3.select(chartHost).append('svg').attr('class', 'chart')
   const g = svg.append('g')
 
   const xAxisG = g.append('g').attr('class', 'axis')
@@ -50,8 +54,8 @@ export function createDiscrepancyView({ el, data, store, countryNameByIso3 }) {
   const lineG = g.append('g')
 
   function render(state) {
-    const width = el.clientWidth
-    const height = el.clientHeight
+    const width = chartHost.clientWidth
+    const height = chartHost.clientHeight
     const margin = { top: 28, right: 16, bottom: 44, left: 60 }
 
     svg.attr('width', width).attr('height', height)

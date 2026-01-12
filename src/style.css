@@ -130,6 +130,18 @@ button:hover {
 .panel-body.with-topbar {
   display: grid;
   grid-template-rows: auto 1fr;
+  gap: 6px;
+  padding: 6px;
+}
+
+.chart-host {
+  min-height: 0;
+}
+
+.chart-host > .chart,
+.chart-host > svg {
+  width: 100%;
+  height: 100%;
 }
 
 .panel-body > .chart,
