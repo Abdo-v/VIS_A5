@@ -80,7 +80,7 @@ function buildLineChart({
       bSeries: compSeries,
       innerWidth: innerW,
       innerHeight: innerH,
-      mode: state.indicatorWindow ?? 'auto',
+      mode: state.indicatorWindow ?? 'full',
     })
 
     const aSeriesClipped = clipSeriesToWindow(austriaSeries, startYear)
@@ -91,7 +91,8 @@ function buildLineChart({
     const yDomain = d3.extent(all, (d) => d.value)
 
     const x = d3.scaleLinear().domain(xDomain ?? [2000, 2024]).range([0, innerW])
-    const y = d3.scaleLinear().domain(yDomain ?? [0, 1]).nice().range([innerH, 0])
+    // A tiny padding prevents the stroke from being clipped when it hits the bounds.
+    const y = d3.scaleLinear().domain(yDomain ?? [0, 1]).nice().range([innerH - 1, 1])
 
     if (showXAxis) {
       const tickCount = Math.max(3, Math.min(7, Math.floor(innerW / 120)))
@@ -265,7 +266,7 @@ export function createSmallMultiplesView({ el, data, store, countryNameByIso3 })
     `
 
     // Update active window button
-    const mode = state.indicatorWindow ?? 'auto'
+    const mode = state.indicatorWindow ?? 'full'
     winGroup.querySelectorAll('button[data-win]').forEach((btn) => {
       btn.classList.toggle('active', btn.dataset.win === mode)
     })

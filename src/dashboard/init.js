@@ -68,7 +68,7 @@ export async function initDashboard(rootEl) {
   const store = createStore({
     selectedCountryIso3: null,
     selectedYear: null,
-    indicatorWindow: 'auto',
+    indicatorWindow: 'full',
   })
 
   function updateHeader(state) {
@@ -84,7 +84,7 @@ export async function initDashboard(rootEl) {
   store.subscribe(updateHeader)
 
   els.resetBtn.addEventListener('click', () => {
-    store.setState({ selectedCountryIso3: null, selectedYear: null })
+    store.setState({ selectedCountryIso3: null, selectedYear: null, indicatorWindow: 'full' })
   })
 
   // Views

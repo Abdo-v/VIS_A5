@@ -123,9 +123,13 @@ button:hover {
 
 .panel-body#indicators {
   display: grid;
-  grid-template-rows: auto 1fr 1fr 1fr;
+  grid-template-rows: auto 1fr 1fr 1.15fr;
   gap: 6px;
-  padding: 6px;
+  padding: 6px 6px 10px;
+}
+
+.sm-block {
+  min-height: 0;
 }
 
 .indicators-topbar {
