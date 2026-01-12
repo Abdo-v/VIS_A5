@@ -1,0 +1,69 @@
+A5: Implementing Your Dashboard Design
+
+Due date: Jan 11 (23:55)
+
+This assignment will have you make your dreams become reality! Take your designs from your previous assignment and develop them into a concrete prototype. You should document all your steps in a short report and submit a final implementation of your dashboard.
+Learning objectives
+
+    Understand how design sketches might not work on actual data
+    Be able to articulate the issues to your users
+    Learn about iterative refinement from first designs to a working prototype
+    Select from a set of design sketches to create a comprehensive visualization
+    Describe how a visualization implements the various tasks
+    Implement a visualization dashboard
+
+Directions
+
+    Select a final dashboard design from your previous assignment to implement.
+    Take the feedback you got on the previous assignment, and incorporate it into your prototype.
+    Implement your final design as a web-based dashboard from scratch in D3 (optionally with Vue.js or another JS framework of your own choice)
+    Document your process and findings as a report
+    Present your approach (Jan 15)
+
+If you have not submitted a low-fidelity design prototype in the 4th assignment, you should include at least one low-fidelity design alongside this 5th assignment (you can use up to two additional pages than the max. allowed: one text page & one pen and paper design page). Describe and justify your design decision in these two pages and explain which tasks you solve with each view.
+Report
+
+The short report (max. 5 pages + 1 for screenshot) must contain the following sections:
+
+    Motivation: Short reminder of the overall problem in your own words. List the tasks (from A4) your users need to address; what is your selected design, and why?
+    Prototyping / Design process: Describe the results of prototyping your design as a web-based dashboard. What can be found in the data using your visualization system? Did you have any visualization ideas that didn’t work on the real data? If so, why? If changes emerged during the prototyping process, describe the changes to your initial visualization design.
+    Implementation details: Describe your final implementation. Show a full-page screenshot of your final dashboard implementation, and list the separate visible views and their functionality (with links to where in the screenshot these views are visible). Describe how the implementation addresses the defined tasks, and your technical decisions regarding the implementation.
+    Discussion: What have you learned? What would you do differently next time? Are your users able to solve the tasks you defined in the beginning? If so, how? If not, what issues did you experience?
+    Conclusion: Summarize the report.
+
+Grading
+The grading will be as follows (100 points total):
+Report (40 points)
+
+    Motivation (2.5 points)
+    Prototyping / Design process (20 points)
+    Implementation Details (10 points)
+    Discussion (5 points)
+    Conclusion (2.5 points)
+
+Visualization Dashboard (60 points)
+The basis for the evaluation is your proposed design and defined tasks, along with the improvement suggestions given as feedback on A4. Your implementation will be graded according to:
+
+    Functionality: the planned user tasks can be executed using the system (35 points)
+    Usability: the system is intuitive for the users, the tasks can be executed with ease of use: effectively, efficiently, and satisfactorily (25 points)
+
+You will get points for the report only when you submit a working implementation. Failure to submit according to the instructions will result in a grade of 0. The final implementation must be submitted in addition to the report and should work as described in the report. Any serious discrepancies between the report and the final implementation will result in a grade of 0, such as when your report mentions features that your final dashboard implementation is lacking. Important: Please be aware that you will need to reach a minimum of 25% of the points on this assignment since this is one of the requirements to pass this course successfully.
+
+
+Please include a brief statement at the end of your report explaining whether and how you used AI for A5.
+Common Pitfalls
+Please make sure that you avoid the following pitfalls. We will take points off for
+
+    making the user scroll up/down
+    making the user switch between tabs
+    use of pop-up views (without strong justification)
+    use of drop-down menus (without strong justification)
+    use of sliders (without strong justification)
+    use of inappropriate color schemes
+    unreadable labels
+    using "_" in labels
+    missing axis labels
+    human unreadable numbers
+    if NULL/missing values are shown as zero
+    missing interactivity between charts
+    animation that is not well justified (detailing alternatives that were considered and rejected and for what reasons)
